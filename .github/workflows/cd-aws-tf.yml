@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - tf-v2
   
 jobs:
   # sonarcloud:
