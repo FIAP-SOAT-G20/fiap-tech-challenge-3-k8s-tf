@@ -1,0 +1,85 @@
+name: cd/aws-tf
+on:
+  push:
+    branches:
+      - main
+  
+jobs:
+  # sonarcloud:
+  #   name: SonarCloud
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Check if Cluster Exists
+        id: check_cluster
+        run: |
+          CLUSTER_NAME="eks-tech-challenge"
+          STATUS=$(aws eks describe-cluster --name $CLUSTER_NAME --query 'cluster.status' --output text 2>/dev/null || echo "not_found")
+          echo "CLUSTER_STATUS=$STATUS" >> $GITHUB_ENV
+  
+      - name: Terraform Init
+        if: env.CLUSTER_STATUS == 'not_found'
+        run: terraform init
+  
+      - name: Terraform Plan
+        if: env.CLUSTER_STATUS == 'not_found'
+        env:
+          TF_LOG: DEBUG
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: env.CLUSTER_STATUS == 'not_found'
+        env:
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+        run: terraform apply -auto-approve
+
+      - name: Creating Cluster
+        if: env.CLUSTER_STATUS == 'not_found'
+        id: wait_for_db
+        run: |
+          CLUSTER_NAME="eks-tech-challenge"
+          STATUS=""
+          while [ "$STATUS" != "ACTIVE" ]; do
+            STATUS=$(aws eks describe-cluster --name $CLUSTER_NAME --query 'cluster.status' --output text)
+            echo "Current status: $STATUS"
+            if [ "$STATUS" != "ACTIVE" ]; then
+              echo "Cluster is not ready yet, waiting for 30 seconds..."
+              sleep 30
+            fi
+          done
+          echo "EKS Cluster $CLUSTER_NAME is now ACTIVE!"
