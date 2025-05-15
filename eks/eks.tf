@@ -7,7 +7,7 @@
 
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
-  version  = "1.30"
+  version  = "1.32"
   role_arn = "arn:aws:iam::431451427543:role/LabRole"
 
   vpc_config {
