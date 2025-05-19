@@ -34,5 +34,7 @@ jobs:
       
       - name: Kube Apply
         run: |
-          kubectl apply -f k8s/eks-deployment.yaml
-          kubectl apply -f k8s/eks-svc.yaml
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/mockserver/
+          kubectl apply -f k8s/config/
+          kubectl apply -f k8s/app/
