@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tech-challenge-api
+  namespace: tech-challenge-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tech-challenge-api
+  template:
+    metadata:
+      labels:
+        app: tech-challenge-api
+    spec:
+      containers:
+        - name: tech-challenge-api
+          image: ghcr.io/fiap-soat-g20/fiap-tech-challenge-3-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: AWS_VPC_K8S_CNI_EXTERNALSNAT
+              value: "true"
+            - name: DB_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: tech-challenge-secrets
+                  key: db_dsn
+            - name: MERCADO_PAGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: tech-challenge-config
+                  key: mercado_pago_url
+            - name: MERCADO_PAGO_NOTIFICATION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: tech-challenge-config
+                  key: mercado_pago_notification_url
+            - name: FAKE_MERCADO_PAGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: tech-challenge-config
+                  key: fake_mercado_pago_url
+            - name: FAKE_MERCADO_PAGO_NOTIFICATION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: tech-challenge-config
+                  key: fake_mercado_pago_notification_url
+          resources:
+            requests:
+              memory: "128Mi" # 128 mebibytes = 134,217,728 bytes = 128 * 1024 * 1024 bytes
+              cpu: "100m" # 100 millicores = 0.1 cores, it means 10% of a core
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          readinessProbe: # verify that the container is ready to accept traffic
+            httpGet:
+              path: /api/v1/health/readyz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          livenessProbe: # verify that the container is running, and restart it if it's not
+            httpGet:
+              path: /api/v1/health/livez
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
