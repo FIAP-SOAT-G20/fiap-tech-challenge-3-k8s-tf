@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - feat/tf-v4
+      - main
 
 env:
   AWS_REGION: us-east-1
-  CLUSTER_NAME: EKS-FIAP
+  CLUSTER_NAME: ff-tech-challenge-eks-cluster
 
 jobs:
   deploy-production:

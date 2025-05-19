@@ -3,7 +3,7 @@ variable "regionDefault" {
 }
 
 variable "projectName" {
-  default = "EKS-FIAP"
+  default = "ff-tech-challenge-eks-cluster"
 }
 
 variable "labRole" {
