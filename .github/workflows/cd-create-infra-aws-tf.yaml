@@ -1,6 +1,7 @@
-name: Create Infra AWS
+name: cd/create-infra-aws-tf
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - feat/tf-v4

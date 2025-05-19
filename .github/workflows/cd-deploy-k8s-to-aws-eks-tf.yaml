@@ -1,0 +1,38 @@
+name: cd/deploy-k8s-to-aws-eks-tf
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/tf-v4
+
+env:
+  AWS_REGION: us-east-1
+  CLUSTER_NAME: EKS-FIAP
+
+jobs:
+  deploy-production:
+    name: Deploy K8s to AWS EKS with Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ID }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update Kube Config
+        run: |
+          aws eks update-kubeconfig \
+          --name ${{ env.CLUSTER_NAME }} \
+          --region ${{ env.AWS_REGION }}
+      
+      - name: Kube Apply
+        run: |
+          kubectl apply -f k8s/eks-deployment.yaml
+          kubectl apply -f k8s/eks-svc.yaml

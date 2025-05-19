@@ -1,6 +1,7 @@
-name: CI
+name: ci/verify-infra-tf
 
 on:
+  workflow_dispatch:
   pull_request:
 
 env:
@@ -8,7 +9,7 @@ env:
 
 jobs:
   ci:
-    name: Continuos Integration
+    name: Verify Infra with Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -21,10 +22,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ID }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: BuildAndPush Dockerfile
-        run: |
-          docker build -t image-docker .
 
       - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: eks-sample-linux-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: eks-sample-linux-app
@@ -26,7 +26,7 @@ spec:
                 - arm64
       containers:
       - name: nginx
-        image: 759212231558.dkr.ecr.us-east-1.amazonaws.com/6nett:latest
+        image: nginx:1.7.9
         resources:
             requests:
               cpu: 256m
