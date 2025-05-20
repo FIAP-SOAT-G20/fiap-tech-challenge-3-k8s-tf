@@ -1,9 +1,32 @@
+NAMESPACE=tech-challenge-ns
+
 # Looks at comments using ## on targets and uses them to produce a help output.
 .PHONY: help
 help: ALIGN=22
 help: ## Print this message
 	@echo "Usage: make <command>"
 	@awk -F '::? .*## ' -- "/^[^':]+::? .*## /"' { printf "  make '$$(tput bold)'%-$(ALIGN)s'$$(tput sgr0)' - %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+.PHONY: tf-init
+tf-init: ## Initialize Terraform
+	@echo  "🟢 Initializing Terraform..."
+	terraform init
+
+.PHONY: tf-plan
+tf-plan: ## Show Terraform plan
+	@echo  "🟢 Showing Terraform plan..."
+	terraform plan
+
+.PHONY: tf-apply
+tf-apply: ## Apply Terraform
+	@echo  "🟢 Applying Terraform..."
+	terraform apply -auto-approve
+
+
+.PHONY: aws-eks-auth
+aws-eks-auth: ## Authenticate with AWS EKS with the 10soat aws profile
+	@echo  "🟢 Authenticating with AWS EKS..."
+	aws eks update-kubeconfig --name ff-tech-challenge-eks-cluster
 
 .PHONY: k8s-apply
 k8s-apply: ## Apply Kubernetes manifests
@@ -12,11 +35,6 @@ k8s-apply: ## Apply Kubernetes manifests
 	kubectl apply -f k8s/mockserver/
 	kubectl apply -f k8s/config/
 	kubectl apply -f k8s/app/
-
-.PHONY: aws-eks-auth
-aws-eks-auth: ## Authenticate with AWS EKS with the 10soat aws profile
-	@echo  "🟢 Authenticating with AWS EKS..."
-	aws eks update-kubeconfig --name fiap-10soat-g22-k8s-cluster
 
 .PHONY: k8s-delete
 k8s-delete: ## Delete Kubernetes resources
@@ -52,3 +70,4 @@ k8s-status: ## Show Kubernetes resources status
 k8s-set-namespace: ## Set Kubernetes namespace
 	@echo  "🟢 Setting Kubernetes namespace..."
 	kubectl config set-context --current --namespace=$(NAMESPACE)
+
