@@ -41,7 +41,7 @@ k8s-apply: ## Apply Kubernetes manifests
 .PHONY: k8s-delete
 k8s-delete: ## Delete Kubernetes resources
 	@echo  "🔴 Deleting Kubernetes resources..."
-	kubectl apply -f k8s/mockserver/
+	kubectl delete -f k8s/mockserver/
 	kubectl delete -f k8s/app/
 	kubectl delete -f k8s/config/
 	kubectl delete -f k8s/namespace.yaml
