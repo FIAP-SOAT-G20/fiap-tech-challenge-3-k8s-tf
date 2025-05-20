@@ -49,7 +49,7 @@ k8s-delete: ## Delete Kubernetes resources
 .PHONY: k8s-logs
 k8s-logs: ## Show application logs
 	@echo  "🟢 Showing application logs..."
-	kubectl logs -f -l app=product-api -n $(NAMESPACE)
+	kubectl logs -f -l app=tech-challenge-api -n $(NAMESPACE)
 
 .PHONY: k8s-status
 k8s-status: ## Show Kubernetes resources status
