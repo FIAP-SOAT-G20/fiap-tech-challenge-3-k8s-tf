@@ -2,14 +2,16 @@ name: ci/verify-infra-tf
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
+    branches:
+      - main
 
 env:
   AWS_REGION: us-east-1
 
 jobs:
   ci:
-    name: Verify Infra with Terraform
+    name: CI - Verify Infra with Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo

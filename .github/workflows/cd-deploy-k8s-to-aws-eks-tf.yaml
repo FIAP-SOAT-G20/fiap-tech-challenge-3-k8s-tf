@@ -12,7 +12,7 @@ env:
 
 jobs:
   deploy-production:
-    name: Deploy K8s to AWS EKS with Terraform
+    name: CD - Deploy K8s to AWS EKS with Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo

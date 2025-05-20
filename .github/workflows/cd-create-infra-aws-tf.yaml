@@ -4,15 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - feat/tf-v4
-#      - main
+      - main
 
 env:
   REGION_DEFAULT: us-east-1
 
 jobs:
   create_infra:
-    name: terraform
+    name: CD - Create Infra AWS with Terraform
     runs-on: ubuntu-latest
 
     steps:
