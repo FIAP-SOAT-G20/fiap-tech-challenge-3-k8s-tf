@@ -22,6 +22,10 @@ output "security_group_id" {
   value = aws_security_group.sg.id
 }
 
+output "subnet_ids" {
+  value = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.regionDefault}e"]
+}
+
 # output "alb_dns" {
 #   value = aws_alb.alb.dns_name
 # }
