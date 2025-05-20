@@ -1,4 +1,5 @@
 NAMESPACE=tech-challenge-ns
+AWS_EKS_CLUSTER_NAME=ff-tech-challenge-eks-cluster
 
 # Looks at comments using ## on targets and uses them to produce a help output.
 .PHONY: help
@@ -26,7 +27,8 @@ tf-apply: ## Apply Terraform
 .PHONY: aws-eks-auth
 aws-eks-auth: ## Authenticate with AWS EKS with the 10soat aws profile
 	@echo  "🟢 Authenticating with AWS EKS..."
-	aws eks update-kubeconfig --name ff-tech-challenge-eks-cluster
+	aws eks update-kubeconfig --name $(AWS_EKS_CLUSTER_NAME)
+# aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
 
 .PHONY: k8s-apply
 k8s-apply: ## Apply Kubernetes manifests
