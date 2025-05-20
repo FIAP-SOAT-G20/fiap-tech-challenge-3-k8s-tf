@@ -25,8 +25,8 @@ tf-apply: ## Apply Terraform
 
 
 .PHONY: aws-eks-auth
-aws-eks-auth: ## Authenticate with AWS EKS with the 10soat aws profile
-	@echo  "🟢 Authenticating with AWS EKS..."
+aws-eks-auth: ## Update kubeconfig for the newly created EKS cluster
+	@echo  "🟢 Updating kubeconfig for the EKS cluster..."
 	aws eks update-kubeconfig --name $(AWS_EKS_CLUSTER_NAME)
 # aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
 
