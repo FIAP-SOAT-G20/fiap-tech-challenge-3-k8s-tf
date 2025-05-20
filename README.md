@@ -1,7 +1,5 @@
 <a name="readme-top"></a>
 
-![GitHub CI - Tests](https://github.com/FIAP-SOAT-G20/fiap-tech-challenge-3-api/actions/workflows/test.yml/badge.svg)
-
 # <p align="center"><b>Fast Food</b> <small>FIAP Tech Challenge 3 - G22 - K8s + TF</small></p>
 
 <p align="center">
@@ -22,7 +20,7 @@ Repository for the [FIAP](https://postech.fiap.com.br/) Tech Challenge 3, where 
 
 ## 🏗️ Architecture
 
-### :whale: AWS EKS
+### :cloud: AWS
 ![AWS EKS](docs/tc3-aws-eks.png)
 
 ### :whale: Kubernetes
@@ -90,7 +88,6 @@ cd fiap-tech-challenge-3-k8s-tf
 
 ## :runner: Running
 
-tf
 ### :gear: Terraform
 
 ```bash
