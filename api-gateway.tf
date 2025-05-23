@@ -82,9 +82,7 @@ resource "aws_lb" "eks_nlb" {
   name               = "eks-nlb"
   internal           = true
   load_balancer_type = "network"
-  subnets            = [
-    for subnet in data.aws_subnet.subnet : subnet.idif subnet.availability_zone != "${var.regionDefault}e"
-  ]
+  subnets            = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.regionDefault}e"]
 
   enable_deletion_protection = false
 }
