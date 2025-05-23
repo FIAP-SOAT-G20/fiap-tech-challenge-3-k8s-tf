@@ -37,3 +37,7 @@ output "lab_role_arn" {
 output "principal_arn" {
   value = var.principalArn
 }
+
+output "api_gateway_url" {
+  value = "https://${aws_api_gateway_rest_api.eks_api.id}.execute-api.${var.regionDefault}.amazonaws.com/${aws_api_gateway_stage.eks_stage.stage_name}"
+}
