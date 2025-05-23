@@ -31,9 +31,9 @@ output "subnet_ids" {
 # }
 
 output "lab_role_arn" {
-  value = vars.labRole
+  value = var.labRole
 }
 
 output "principal_arn" {
-  value = vars.principalArn
+  value = var.principalArn
 }
