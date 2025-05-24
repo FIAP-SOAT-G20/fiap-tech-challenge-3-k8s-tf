@@ -32,15 +32,15 @@ variable "policy_arn" {
 
 variable "cidr_block" {
   type    = string
-  default = "172.31.0.0/16"
+  default = "10.0.0.0/16"
 }
 
 variable "tags" {
   type = map(string)
   default = {
-    Name        = "ff-tech-challenge-eks-cluster"
+    Name        = "tech-challenge-3-k8s"
     Environment = "dev"
-    Project     = "ff-tech-challenge"
+    Project     = "tech-challenge"
   }
 
 }
