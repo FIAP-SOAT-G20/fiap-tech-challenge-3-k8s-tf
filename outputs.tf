@@ -31,5 +31,10 @@ output "lab_role_arn" {
 }
 
 output "principal_arn" {
-  value = data.aws_iam_role.voclabs_role.arn
+  value = data.aws_iam_role.voclabs_role.assume_role_policy.arn
 }
+
+
+# output "loadbalancer_hostname" {
+#   value = data.kubernetes_service.example.status[0].load_balancer[0].ingress[0].hostname
+# }
