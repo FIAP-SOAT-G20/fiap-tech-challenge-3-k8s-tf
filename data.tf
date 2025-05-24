@@ -25,3 +25,11 @@ data "aws_iam_role" "fiap_lab_role" {
 #   name = "voclabs"
 # }
 
+data "aws_eks_cluster" "eks_cluster" {
+  name = var.project_name
+}
+
+data "aws_eks_cluster_auth" "eks_cluster_auth" {
+  name = var.project_name
+}
+

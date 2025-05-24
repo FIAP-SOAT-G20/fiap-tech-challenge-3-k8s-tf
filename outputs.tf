@@ -39,5 +39,5 @@ output "cluster_ca_certificate" {
 }
 
 output "cluster_token" {
-  value = aws_eks_cluster.eks-cluster.token
+  value = data.aws_eks_cluster_auth.eks_cluster_auth.token
 }
