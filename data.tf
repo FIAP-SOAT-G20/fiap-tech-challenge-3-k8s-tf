@@ -21,13 +21,7 @@ data "aws_iam_role" "fiap_lab_role" {
   name = "LabRole"
 }
 
-data "aws_iam_role" "voclabs_role" {
-  name = "voclabs"
-}
-
-# data "kubernetes_service" "example" {
-#   metadata {
-#     name      = "my-loadbalancer-service"
-#     namespace = "default"
-#   }
+# data "aws_iam_role" "voclabs_role" {
+#   name = "voclabs"
 # }
+
