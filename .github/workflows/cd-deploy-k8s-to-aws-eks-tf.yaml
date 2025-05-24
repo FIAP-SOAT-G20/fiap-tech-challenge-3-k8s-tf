@@ -44,7 +44,7 @@ jobs:
         env:
           DB_DSN: ${{ secrets.DB_DSN }}
           DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USERNAME }}
+          DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       
       - name: Kube Apply
