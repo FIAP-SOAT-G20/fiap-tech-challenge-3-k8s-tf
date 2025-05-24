@@ -6,7 +6,7 @@ resource "aws_api_gateway_rest_api" "eks_api" {
 
 # VPC Link for connecting API Gateway to the EKS cluster
 resource "aws_api_gateway_vpc_link" "eks_vpc_link" {
-  name = "eks-vpc-link"
+  name        = "eks-vpc-link"
   target_arns = [aws_lb.eks_nlb.arn]
 }
 
@@ -82,7 +82,7 @@ resource "aws_lb" "eks_nlb" {
   name               = "eks-nlb"
   internal           = true
   load_balancer_type = "network"
-  subnets            = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.regionDefault}e"]
+  subnets            = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.region}e"]
 
   enable_deletion_protection = false
 }

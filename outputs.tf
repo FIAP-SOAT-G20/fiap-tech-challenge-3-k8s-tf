@@ -23,7 +23,7 @@ output "security_group_id" {
 }
 
 output "subnet_ids" {
-  value = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.regionDefault}e"]
+  value = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.region}e"]
 }
 
 # output "alb_dns" {
@@ -31,13 +31,13 @@ output "subnet_ids" {
 # }
 
 output "lab_role_arn" {
-  value = var.labRole
+  value = var.lab_role
 }
 
 output "principal_arn" {
-  value = var.principalArn
+  value = var.principal_arn
 }
 
 output "api_gateway_url" {
-  value = "https://${aws_api_gateway_rest_api.eks_api.id}.execute-api.${var.regionDefault}.amazonaws.com/${aws_api_gateway_stage.eks_stage.stage_name}"
+  value = "https://${aws_api_gateway_rest_api.eks_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.eks_stage.stage_name}"
 }
