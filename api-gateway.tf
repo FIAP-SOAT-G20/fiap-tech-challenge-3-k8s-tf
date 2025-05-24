@@ -4,12 +4,6 @@ resource "aws_api_gateway_rest_api" "eks_api" {
   description = "API Gateway for EKS cluster"
 }
 
-# VPC Link for connecting API Gateway to the EKS cluster
-resource "aws_api_gateway_vpc_link" "eks_vpc_link" {
-  name        = "eks-vpc-link"
-  target_arns = [aws_lb.eks_nlb.arn]
-}
-
 # API Gateway Resource for proxy path
 resource "aws_api_gateway_resource" "proxy_resource" {
   rest_api_id = aws_api_gateway_rest_api.eks_api.id
@@ -25,30 +19,7 @@ resource "aws_api_gateway_method" "proxy_method" {
   authorization = "NONE"
 
   request_parameters = {
-    "method.request.path.proxy"           = true
-    "method.request.header.Authorization" = true
-  }
-}
-
-# API Gateway Integration with the VPC Link
-resource "aws_api_gateway_integration" "eks_integration" {
-  rest_api_id = aws_api_gateway_rest_api.eks_api.id
-  resource_id = aws_api_gateway_resource.proxy_resource.id
-  http_method = "ANY"
-
-  type                    = "HTTP_PROXY"
-  integration_http_method = "ANY"
-  uri                     = "http://${aws_lb.eks_nlb.dns_name}/{proxy}"
-  passthrough_behavior    = "WHEN_NO_MATCH"
-  content_handling        = "CONVERT_TO_TEXT"
-
-  connection_type = "VPC_LINK"
-  connection_id   = aws_api_gateway_vpc_link.eks_vpc_link.id
-
-  request_parameters = {
-    "integration.request.path.proxy"           = "method.request.path.proxy"
-    "integration.request.header.Accept"        = "'application/json'"
-    "integration.request.header.Authorization" = "method.request.header.Authorization"
+    "method.request.path.proxy" = true
   }
 }
 
@@ -60,6 +31,28 @@ resource "aws_api_gateway_method" "root_method" {
   authorization = "NONE"
 }
 
+# Data source para buscar o Classic Load Balancer criado pelo Kubernetes
+data "aws_elb" "k8s_loadbalancer" {
+  name = "a16a88e97612b4542bb399d1ba8dfb9c"
+}
+
+# API Gateway Integration usando o Load Balancer do Kubernetes
+resource "aws_api_gateway_integration" "eks_integration" {
+  rest_api_id = aws_api_gateway_rest_api.eks_api.id
+  resource_id = aws_api_gateway_resource.proxy_resource.id
+  http_method = aws_api_gateway_method.proxy_method.http_method
+
+  type                    = "HTTP_PROXY"
+  integration_http_method = "ANY"
+  uri = "http://${data.aws_elb.k8s_loadbalancer.dns_name}/{proxy}"
+  passthrough_behavior    = "WHEN_NO_MATCH"
+
+  request_parameters = {
+    "integration.request.path.proxy"    = "method.request.path.proxy"
+    "integration.request.header.Accept" = "'application/json'"
+  }
+}
+
 # API Gateway Integration for the root resource
 resource "aws_api_gateway_integration" "root_integration" {
   rest_api_id = aws_api_gateway_rest_api.eks_api.id
@@ -68,54 +61,8 @@ resource "aws_api_gateway_integration" "root_integration" {
 
   type                    = "HTTP_PROXY"
   integration_http_method = "ANY"
-  uri                     = "http://${aws_lb.eks_nlb.dns_name}/"
+  uri = "http://${data.aws_elb.k8s_loadbalancer.dns_name}/"
   passthrough_behavior    = "WHEN_NO_MATCH"
-  content_handling        = "CONVERT_TO_TEXT"
-
-  connection_type = "VPC_LINK"
-  connection_id   = aws_api_gateway_vpc_link.eks_vpc_link.id
-}
-
-
-# Network Load Balancer for the EKS cluster
-resource "aws_lb" "eks_nlb" {
-  name               = "eks-nlb"
-  internal           = true
-  load_balancer_type = "network"
-  subnets            = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.region}e"]
-
-  enable_deletion_protection = false
-}
-
-# Target group for the NLB
-resource "aws_lb_target_group" "eks_tg" {
-  name        = "eks-tg"
-  port        = 80
-  protocol    = "TCP"
-  vpc_id      = data.aws_vpc.vpc.id
-  target_type = "ip"
-
-  health_check {
-    enabled             = true
-    interval            = 30
-    port                = 8080
-    protocol            = "TCP"
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-  }
-}
-
-
-# NLB Listener
-resource "aws_lb_listener" "eks_listener" {
-  load_balancer_arn = aws_lb.eks_nlb.arn
-  port              = 80
-  protocol          = "TCP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.eks_tg.arn
-  }
 }
 
 # API Gateway Deployment
