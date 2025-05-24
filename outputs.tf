@@ -27,9 +27,9 @@ output "subnet_ids" {
 }
 
 output "lab_role_arn" {
-  value = var.lab_role
+  value = data.aws_iam_role.fiap_lab_role.arn
 }
 
 output "principal_arn" {
-  value = var.principal_arn
+  value = data.aws_iam_role.voclabs_role.arn
 }

@@ -16,3 +16,11 @@ data "aws_subnet" "subnet" {
   id       = each.value
   # tags = var.tags
 }
+
+data "aws_iam_role" "fiap_lab_role" {
+  name = "LabRole"
+}
+
+data "aws_iam_role" "voclabs_role" {
+  name = "voclabs"
+}
