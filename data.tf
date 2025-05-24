@@ -22,5 +22,5 @@ data "aws_iam_role" "fiap_lab_role" {
 }
 
 data "aws_iam_role" "voclabs_role" {
-  name = "voclabs"
+  name = "LabRole"
 }
