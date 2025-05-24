@@ -34,7 +34,10 @@ output "principal_arn" {
   value = var.principal_arn # data.aws_iam_role.voclabs_role.assume_role_policy.arn
 }
 
+output "cluster_ca_certificate" {
+  value       = aws_eks_cluster.eks-cluster.certificate_authority[0].data
+}
 
-# output "loadbalancer_hostname" {
-#   value = data.kubernetes_service.example.status[0].load_balancer[0].ingress[0].hostname
-# }
+output "cluster_token" {
+  value = aws_eks_cluster.eks-cluster.token
+}
