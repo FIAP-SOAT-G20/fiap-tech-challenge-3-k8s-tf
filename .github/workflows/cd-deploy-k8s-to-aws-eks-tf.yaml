@@ -39,8 +39,8 @@ jobs:
 
       - name: Set Kubernetes envs
         run: |
-          envsubst < k8s/config/configmap.yaml > k8s/config/configmap.yaml
-          envsubst < k8s/config/secrets.yaml > k8s/config/secrets.yaml
+          envsubst < k8s/config/configmap.yaml > k8s/config/configmap-f.yaml
+          envsubst < k8s/config/secrets.yaml > k8s/config/secrets-f.yaml
         env:
           DB_DSN: ${{ secrets.DB_DSN }}
           DB_NAME: ${{ secrets.DB_NAME }}
