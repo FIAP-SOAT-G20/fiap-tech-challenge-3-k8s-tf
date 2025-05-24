@@ -39,5 +39,5 @@ output "principal_arn" {
 }
 
 output "api_gateway_url" {
-  value = "https://${aws_api_gateway_rest_api.eks_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.eks_stage.stage_name}"
+  value = "https://${aws_api_gateway_rest_api.fast_food_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.stage.stage_name}"
 }
