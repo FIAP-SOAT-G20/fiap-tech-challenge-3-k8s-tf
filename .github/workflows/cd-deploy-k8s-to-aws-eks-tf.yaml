@@ -1,10 +1,15 @@
 name: cd/deploy-k8s-to-aws-eks-tf
 
 on:
+  workflow_run:
+    workflows: [cd/create-infra-aws-tf]
+    types:
+      - completed
   workflow_dispatch:
   push:
     branches:
       - main
+      - feat/create-k8s-tf-with-api-gateway
 
 env:
   AWS_REGION: us-east-1
@@ -31,6 +36,16 @@ jobs:
           aws eks update-kubeconfig \
           --name ${{ env.CLUSTER_NAME }} \
           --region ${{ env.AWS_REGION }}
+
+      - name: Set Kubernetes envs
+        run: |
+          envsubst < k8s/config/configmap.yaml > k8s/config/configmap.yaml
+          envsubst < k8s/config/secrets.yaml > k8s/config/secrets.yaml
+        env:
+          DB_DSN: ${{ secrets.DB_DSN }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       
       - name: Kube Apply
         run: |

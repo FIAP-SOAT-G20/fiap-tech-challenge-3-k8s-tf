@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - feat/create-k8s-tf-with-api-gateway
 
 env:
   AWS_REGION: us-east-1
