@@ -1,31 +1,46 @@
-variable "regionDefault" {
+variable "region" {
   default = "us-east-1"
 }
 
-variable "projectName" {
+variable "project_name" {
   default = "ff-tech-challenge-eks-cluster"
 }
 
-variable "labRole" {
-  default = "arn:aws:iam::389796586146:role/LabRole"
+variable "lab_role" {
+  default = "arn:aws:iam::085825598909:role/LabRole"
 }
 
-variable "accessConfig" {
+variable "access_config" {
   default = "API_AND_CONFIG_MAP"
 }
 
-variable "nodeGroup" {
+variable "node_group" {
   default = "fiap"
 }
 
-variable "instanceType" {
+variable "instance_type" {
   default = "t3.medium"
 }
 
-variable "principalArn" {
-  default = "arn:aws:iam::389796586146:role/voclabs"
+variable "principal_arn" {
+  default = "arn:aws:iam::085825598909:role/voclabs"
 }
 
-variable "policyArn" {
+variable "policy_arn" {
   default = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+}
+
+variable "cidr_block" {
+  type    = string
+  default = "172.31.0.0/16"
+}
+
+variable "tags" {
+  type = map(string)
+  default = {
+    Name        = "tech-challenge-3-k8s"
+    Environment = "dev"
+    Project     = "tech-challenge"
+  }
+
 }
