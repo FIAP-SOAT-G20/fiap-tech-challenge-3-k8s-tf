@@ -23,17 +23,22 @@ output "security_group_id" {
 }
 
 output "subnet_ids" {
-  value = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.regionDefault}e"]
+  value = [for subnet in data.aws_subnet.subnet : subnet.id if subnet.availability_zone != "${var.region}e"]
 }
 
-# output "alb_dns" {
-#   value = aws_alb.alb.dns_name
-# }
-
 output "lab_role_arn" {
-  value = vars.labRole
+  value = data.aws_iam_role.fiap_lab_role.arn
 }
 
 output "principal_arn" {
-  value = vars.principalArn
+  value = var.principal_arn # data.aws_iam_role.voclabs_role.assume_role_policy.arn
+}
+
+output "cluster_ca_certificate" {
+  value       = aws_eks_cluster.eks-cluster.certificate_authority[0].data
+}
+
+output "cluster_token" {
+  value = data.aws_eks_cluster_auth.eks_cluster_auth.token
+  sensitive = true
 }

@@ -1,5 +1,5 @@
 resource "aws_security_group" "sg" {
-  name        = "SG-${var.projectName}"
+  name        = "SG-${var.project_name}"
   description = "Usado no EKS com 10SOAT"
   vpc_id      = ""
 

@@ -1,10 +1,15 @@
 name: cd/create-infra-aws-tf
 
 on:
+  workflow_run:
+    workflows: [ci/verify-infra-tf]
+    types:
+      - completed
   workflow_dispatch:
   push:
     branches:
       - main
+      - feat/create-k8s-tf-with-api-gateway
 
 env:
   REGION_DEFAULT: us-east-1
