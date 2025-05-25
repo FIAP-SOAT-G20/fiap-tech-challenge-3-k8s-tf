@@ -17,6 +17,13 @@ Repository for the [FIAP](https://postech.fiap.com.br/) Tech Challenge 3, where 
 > [!NOTE]
 > Tech Challenge 3 API repository can be found [here](https://github.com/FIAP-SOAT-G20/fiap-tech-challenge-3-api)  
 
+## 🔗 Related Projects
+
+This project is part of a larger system that includes:
+
+- [Database Infrastructure (Terraform)](https://github.com/FIAP-SOAT-G20/fiap-tech-challenge-3-db-tf) - Infrastructure as Code for PostgreSQL RDS using Terraform
+- [Lambda Authentication (Terraform)](https://github.com/FIAP-SOAT-G20/fiap-tech-challenge-3-lambda-auth-tf) - Infrastructure as Code for AWS Lambda authentication using Terraform
+- [API Service](https://github.com/FIAP-SOAT-G20/fiap-tech-challenge-3-api) - Main backend service implementing the Fast Food ordering system
 
 ## 🏗️ Architecture
 
