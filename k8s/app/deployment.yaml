@@ -46,6 +46,11 @@ spec:
                 configMapKeyRef:
                   name: tech-challenge-config
                   key: fake_mercado_pago_notification_url
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: tech-challenge-config
+                  key: jwt_secret
           resources:
             requests:
               memory: "128Mi" # 128 mebibytes = 134,217,728 bytes = 128 * 1024 * 1024 bytes
