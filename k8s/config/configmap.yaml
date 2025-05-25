@@ -4,6 +4,7 @@ metadata:
   name: tech-challenge-config
   namespace: tech-challenge-ns
 data:
+  jwt_secret: "my-jwt-secret"
   db_name: "${DB_NAME}" # "fastfood_10soat_g22_tc3"
   environment: "tech-challenge"
   fake_mercado_pago_url: "http://mock-server.tech-challenge-ns.svc.cluster.local:80/mercadopago/instore/orders/qr"
