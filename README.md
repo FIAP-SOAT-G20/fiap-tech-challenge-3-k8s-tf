@@ -155,6 +155,7 @@ The Kubernetes organization is divided into three main directories: `app`, `conf
 
 - [Provision an EKS cluster (AWS)](https://developer.hashicorp.com/terraform/tutorials/kubernetes/eks)
 - [terraform-academy by Douglas (FIAP)](https://github.com/dougls/terraform-academy)
+- [Terraform AWS EKS Module](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
